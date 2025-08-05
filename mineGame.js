@@ -3,6 +3,8 @@ class MineGame
     // Constructs a MineGame instance for correlating difficulty
     constructor(difficulty)
     {
+        this.lose = false;
+
         if (difficulty == "easy")
         {
             this.rowCount = 5;
@@ -96,6 +98,44 @@ class MineGame
         }
     }
 
+    // Reveals or flags tile clicked
+    tileClicked(rowIndex, colIndex, flagOn)
+    {
+        // Check if game is already won or lost
+        if (this.won || this.lose)
+        {
+            return;
+        }
+
+        // Get current values of tile
+        currentRevealed = this.gameGrid[rowIndex][colIndex].revealed;
+        currentFlagged = this.gameGrid[rowIndex][colIndex].flagged;
+        currentMine = this.gameGrid[rowIndex][colIndex].mine;
+        currentNumber = this.gameGride[rowIndex][colIndex].numMines;
+
+        // If flag is off and tile is flagged then do nothing
+        if (!flagOn && currentFlagged)
+        {
+            return;
+        }
+        // If flag is on and tile is not revealed then toggle flag
+        else if (flagOn && !currentRevealed)
+        {
+            this.gameGrid[rowIndex][colIndex].flagged = !currentFlagged;
+        }
+        // If flag is not on, tile is not flagged and tile is not mine then reveal tile
+        else if (!flagOn && !currentFlagged && !currentMine)
+        {
+            this.gameGrid[rowIndex][colIndex].revealed = true;
+
+            // If tile is 0 tile i.e. has no mines touching it then reveal all adjacent tiles
+            if (currentNumber == 0)
+            {
+                
+            }
+        }
+    }
+
     // Check if game is won
     get won()
     {
@@ -105,6 +145,7 @@ class MineGame
         {
             for (let j = 0; j < this.colCount; j++)
             {
+                // If tile is not revealed and is not a mine then game return false
                 if (!this.gameGrid[i][j].revealed && !this.gameGrid[i][j].mine)
                 {
                     allTilesRevealed = false;

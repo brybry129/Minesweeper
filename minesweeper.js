@@ -61,20 +61,11 @@ function canvasClicked(event)
     const col = Math.floor(x * game.colCount / canvas.width);
 
     // Call clickTile
-    clickTile(row, col);
+    game.clickTile(row, col, flagOn);
 }
 
 // Render game tiles
 function render()
 {
 
-}
-
-// Handles a click at a specific location. Checks if mine or number clicked and reveals it
-function clickTile(rowIndex, colIndex)
-{
-    if (game.won)
-    {
-        return;
-    }
 }
