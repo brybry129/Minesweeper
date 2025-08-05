@@ -26,22 +26,26 @@ class MineGame
 
         // Allocate game area array with initial mine object
         this.gameGrid = [];
-        for (let i=0; i < this.rowCount; i++)
+        for (let row=0; row < this.rowCount; row++)
         {
-            for (let j=0; j < this.colCount; j++)
+            this.gameGrid[row] = [];
+            for (let col=0; col < this.colCount; col++)
             {
-                this.gameGrid[i][j] = 
+                this.gameGrid[row][col] = 
                 {
-                    "mine": false,
-                    "numMines": 0,
-                    "flagged": false,
-                    "revealed": false
+                    mine: false,
+                    numMines: 0,
+                    flagged: false,
+                    revealed: false
                 };
+                //console.log(this.gameGrid[row][col]);
             }
             
         }
 
         // Randomly assign mines
+        this.randomlyAssignMines()
+        //console.log(this.gameGrid);
 
     }
 
@@ -62,27 +66,27 @@ class MineGame
         }
 
         // Assign numbers next to mines
-        for (let i = 0; i < this.rowCount; i++)
+        for (let row = 0; row < this.rowCount; row++)
         {
-            for (let j = 0; j < this.colCount; j++) 
+            for (let col = 0; col < this.colCount; col++) 
             {  
                 // If mine found, find all adjacent tiles
-                if (this.gameGrid[i][j].mine)
+                if (this.gameGrid[row][col].mine)
                 {
                     
                     // Left and right
-                    this.increaseMineCount(i, j+1);
-                    this.increaseMineCount(i, j-1);
+                    this.increaseMineCount(row, col+1);
+                    this.increaseMineCount(row, col-1);
 
                     // Up and down
-                    this.increaseMineCount(i+1, j);
-                    this.increaseMineCount(i-1, j);
+                    this.increaseMineCount(row+1, col);
+                    this.increaseMineCount(row-1, col);
 
                     // Diagonals
-                    this.increaseMineCount(i-1,j-1) //top left
-                    this.increaseMineCount(i-1,j+1) //top right
-                    this.increaseMineCount(i+1,j-1) //bottom left
-                    this.increaseMineCount(i+1,j+1) //bottom right
+                    this.increaseMineCount(row-1,col-1) //top left
+                    this.increaseMineCount(row-1,col+1) //top right
+                    this.increaseMineCount(row+1,col-1) //bottom left
+                    this.increaseMineCount(row+1,col+1) //bottom right
 
                 }
             }
@@ -92,7 +96,7 @@ class MineGame
     // Increase mine count on adjacent tiles to a mine
     increaseMineCount(rowIndex, colIndex)
     {
-        if (rowIndex < this.rowCount && rowIndex > 0 && colIndex < this.colCount && colIndex > 0)
+        if (rowIndex < this.rowCount && rowIndex > 0 && colIndex < this.colCount && colIndex > 0 && !this.gameGrid[rowIndex][colIndex].mine)
         {
             this.gameGrid[rowIndex][colIndex].numMines++;
         }
@@ -107,31 +111,56 @@ class MineGame
             return;
         }
 
-        // Get current values of tile
-        currentRevealed = this.gameGrid[rowIndex][colIndex].revealed;
-        currentFlagged = this.gameGrid[rowIndex][colIndex].flagged;
-        currentMine = this.gameGrid[rowIndex][colIndex].mine;
-        currentNumber = this.gameGride[rowIndex][colIndex].numMines;
+        // Get the tile that was clicked
+        //console.log(rowIndex + ", " + colIndex)
+        let currentTile = this.getTile(rowIndex, colIndex);
+        console.log(currentTile);
 
         // If flag is off and tile is flagged then do nothing
-        if (!flagOn && currentFlagged)
+        if (!flagOn && currentTile.flagged)
         {
             return;
         }
         // If flag is on and tile is not revealed then toggle flag
-        else if (flagOn && !currentRevealed)
+        else if (flagOn && !currentTile.revealed)
         {
-            this.gameGrid[rowIndex][colIndex].flagged = !currentFlagged;
+            this.gameGrid[rowIndex][colIndex].flagged = !currentTile.flagged;
         }
         // If flag is not on, tile is not flagged and tile is not mine then reveal tile
-        else if (!flagOn && !currentFlagged && !currentMine)
+        else if (!flagOn && !currentTile.flagged && !currentTile.mine)
         {
             this.gameGrid[rowIndex][colIndex].revealed = true;
 
             // If tile is 0 tile i.e. has no mines touching it then reveal all adjacent tiles
-            if (currentNumber == 0)
+            if (currentTile.numMines == 0)
             {
-                
+                //ADD THIS!!!!!
+            }
+        }
+        // if flag is off and tile is mine then set lose boolean and reveal all mines
+        else if (!flagOn && currentTile.mine)
+        {
+            this.lose = true;
+
+            // Reveal all mines
+            this.revealMines();
+        }
+    }
+
+    getTile(rowIndex, colIndex)
+    {
+        //console.log(this.gameGrid[rowIndex][colIndex]);
+        return this.gameGrid[rowIndex][colIndex];
+    }
+
+    // Reveal all mines
+    revealMines()
+    {
+        for (let row = 0; row < this.rowCount; row++)
+        {
+            for (let col = 0; col < this.colCount; col++)
+            {
+                this.gameGrid[row][col].revealed = true;
             }
         }
     }
@@ -140,17 +169,20 @@ class MineGame
     get won()
     {
         // If all tiles except mine tiles revealed the game is won
-        allTilesRevealed = true;
-        for (let i = 0; i < this.rowCount; i++)
+        let allTilesRevealed = true;
+        for (let row = 0; row < this.rowCount; row++)
         {
-            for (let j = 0; j < this.colCount; j++)
+            for (let col = 0; col < this.colCount; col++)
             {
+                let currentTile = this.getTile(row, col);
                 // If tile is not revealed and is not a mine then game return false
-                if (!this.gameGrid[i][j].revealed && !this.gameGrid[i][j].mine)
+                if (!currentTile.revealed && !currentTile.mine)
                 {
                     allTilesRevealed = false;
                 }
             }
         }
+
+        return allTilesRevealed;
     }
 }
