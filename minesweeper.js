@@ -12,7 +12,7 @@ function domLoaded()
 {
     // Click event listener for new game button
     const newGameButton = document.getElementById("newGame");
-    const difficultyButton = document.getElementById("difficulty")
+    const difficultyButton = document.getElementById("difficulty");
     newGameButton.addEventListener("click", function() {newGame(difficultyButton.value)});
 
     // Click event listener for flag button
@@ -71,8 +71,33 @@ function canvasClicked(e)
     const row = Math.floor(y * game.rowCount / canvas.height);
     const col = Math.floor(x * game.colCount / canvas.width);
 
-    // Call tileClicked
+    // Call clickTile
+    clickTile(row, col, flagOn);
+}
+
+// Handles a click on a tile. Reveals tile and checks if game is won or lost
+function clickTile(row, col, flagOn)
+{
+    // Ignore click if game is already won or lost
+    if (game.won || game.lose)
+    {
+        return;
+    }
+
     game.tileClicked(row, col, flagOn);
+    console.log(game.won);
+
+    // Check if game won
+    if (game.won)
+    {
+        let score = game.score;
+        document.getElementById("gameInfo").innerHTML = "<p><strong> You Win! </strong></p> <p> Score: " + score + "</p>"
+    }
+    if (game.lose)
+    {
+        let score = game.score;
+        document.getElementById("gameInfo").innerHTML = "<p><strong> You Exploded! </strong></p> <p> Score: " + score + "</p>"
+    }
 }
 
 // Render game tiles
