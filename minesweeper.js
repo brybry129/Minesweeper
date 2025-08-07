@@ -47,11 +47,11 @@ function toggleFlag()
     
     if (!flagOn)
     {
-        flagButton.style.color = "red";
+        flagButton.classList.add("highlight");
     }
     else
     {
-        flagButton.style.color = "black";
+        flagButton.classList.remove("highlight")
     }
     flagOn = !flagOn;
 }
@@ -133,8 +133,8 @@ function render()
             // Check if tile is flagged
             if (currentTile.flagged)
             {
-                ctx.fillStyle = "green";
-                ctx.fillText("X", tileWidth * col + (tileWidth/2) - 20, tileHeight * row + (tileHeight/2) + 20);
+                ctx.fillStyle = "darkmagenta";
+                ctx.fillText("⚑", tileWidth * col + (tileWidth/2) - 20, tileHeight * row + (tileHeight/2) + 20);
             }
             // Check if tile is revealed and not a mine
             else if (currentTile.revealed && !currentTile.mine)

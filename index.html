@@ -5,17 +5,22 @@
     <title>Minesweeper</title>
     <script src="mineGame.js"></script>
     <script src="minesweeper.js"></script>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Minesweeper</h1>
-    <canvas id="gameArea" width="500" height="500"></canvas>
-    <input id="flag" type="button" value="X">
-    <select id="difficulty" name="difficulty" type="dropdown">
-        <option value="easy">Easy 5x5</option>
-        <option value="medium">Medium 10x10</option>
-        <option value="hard">Hard 20x20</option>
-    </select>
-    <input id="newGame" type="button" value="New Game">
-    <div id="gameInfo"></div>
+    <div class="grid-container">
+        <canvas id="gameArea" width="500" height="500"></canvas>
+        <button id="flag">⚑</button>
+        <div class="dropdown">
+            <label for="difficulty">Choose difficulty:</label>
+            <select id="difficulty" name="difficulty" type="dropdown">
+                <option value="easy">Easy 5x5</option>
+                <option value="medium">Medium 10x10</option>
+                <option value="hard">Hard 20x20</option>
+            </select>
+            <input id="newGame" type="button" value="New Game">
+        </div>
+        <div id="gameInfo"></div>
+    </div>
 </body>
