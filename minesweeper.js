@@ -19,10 +19,6 @@ function domLoaded()
     const flagButton = document.getElementById("flag");
     flagButton.addEventListener("click", toggleFlag);
 
-    // Click event listener for canvas
-    const canvas = document.getElementById("gameArea");
-    canvas.addEventListener("click", canvasClicked);
-
     // Start new easy game
     newGame("easy");
 
@@ -33,11 +29,54 @@ function domLoaded()
 // Handles new game click event. Resets to a new game, resets game info paragraph
 function newGame(difficulty)
 {
+    // Create new game object
     game = new MineGame(difficulty);
 
+    // Set grid size
+    document.getElementById("gameArea").style.gridTemplateColumns = "repeat(" + game.colCount + ", auto)";
+    document.getElementById("gameArea").style.gridTemplateRows = "repeat(" + game.rowCount + ", auto)";
+
+    // Create tiles
+    createGameTiles();
+
+    // Reset Game Info area
     const gameInfo = document.getElementById("gameInfo");
     gameInfo.textContent = "";
     game.flagOn = false;
+}
+
+// Handles creating buttons for game area
+function createGameTiles()
+{
+    // Remove all old tiles
+    let gameArea = document.getElementById("gameArea");
+    gameArea.innerHTML = "";
+
+    // Loop through game grid and create buttons for each one
+    for (let row = 0; row < game.rowCount; row++)
+    {
+        for (let col = 0; col < game.colCount; col++)
+        {
+            let tile = game.getTile(row, col);
+            let button = document.createElement('input');
+            button.classList.add("tile");
+            button.id = "r" + row + "c" + col;
+            button.type = "button";
+            if (tile.mine)
+            {
+                button.value = "💥";
+            }
+            else
+            {
+                button.value = tile.numMines;
+            }
+            
+            // Add event listener to button
+            button.addEventListener("click", function(){clickTile(row, col)});
+
+            gameArea.appendChild(button);
+        }
+    }
 }
 
 // Handles flag clicked event. Toggle flag button
@@ -45,38 +84,20 @@ function toggleFlag()
 { 
     let flagButton = document.getElementById("flag");
     
+    // Highlight flag button when toggled on
     if (!flagOn)
     {
         flagButton.classList.add("highlight");
     }
     else
     {
-        flagButton.classList.remove("highlight")
+        flagButton.classList.remove("highlight");
     }
     flagOn = !flagOn;
 }
 
-// Handles canvas clicked events
-function canvasClicked(e)
-{
-    // Get the canvas and bounding client rectangle
-    const canvas = e.target;
-    const rect = canvas.getBoundingClientRect();
-
-    // Compute click coordinates, relative to canvas
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Convert from pixel coordinates to row and column
-    const row = Math.floor(y * game.rowCount / canvas.height);
-    const col = Math.floor(x * game.colCount / canvas.width);
-
-    // Call clickTile
-    clickTile(row, col, flagOn);
-}
-
 // Handles a click on a tile. Reveals tile and checks if game is won or lost
-function clickTile(row, col, flagOn)
+function clickTile(row, col)
 {
     // Ignore click if game is already won or lost
     if (game.won || game.lose)
@@ -85,7 +106,6 @@ function clickTile(row, col, flagOn)
     }
 
     game.tileClicked(row, col, flagOn);
-    console.log(game.won);
 
     // Check if game won
     if (game.won)
@@ -106,54 +126,25 @@ function render()
     // Request next animation frame in advance
     window.requestAnimationFrame(render);
 
-    let canvas = document.getElementById("gameArea");
-    let ctx = canvas.getContext('2d');
-
-    // Computer width and height of a tile's rectangle on the canvas
-    const tileWidth = canvas.width / game.colCount;
-    const tileHeight = canvas.height / game.rowCount;
-
-    // Get the tile
     for (let row = 0; row < game.rowCount; row++)
     {
         for (let col = 0; col < game.colCount; col++)
         {
-            let currentTile = game.getTile(row, col);
-
-            // Fill the tile rectangle
-            ctx.fillStyle = "gray";
-            ctx.fillRect(tileWidth * col, tileHeight * row, tileWidth, tileHeight);
-
-            // Draw a thin white border to make each tile visually distinct
-            ctx.strokeStyle = "white";
-            ctx.strokeRect(tileWidth * col, tileHeight * row, tileWidth, tileHeight);
-
-            ctx.font = "50pt Arial";
-
-            // Check if tile is flagged
-            if (currentTile.flagged)
+            let tile = game.getTile(row, col);
+            let button = document.getElementById("r" + row + "c" + col);
+            // Check if tile is revealed
+            if (tile.revealed)
             {
-                ctx.fillStyle = "darkmagenta";
-                ctx.fillText("⚑", tileWidth * col + (tileWidth/2) - 20, tileHeight * row + (tileHeight/2) + 20);
+                button.style.fontSize = "100%";
             }
-            // Check if tile is revealed and not a mine
-            else if (currentTile.revealed && !currentTile.mine)
+            else if (tile.flagged)
             {
-                ctx.fillStyle = "white";
-                ctx.fillText(currentTile.numMines, tileWidth * col + (tileWidth/2) - 20, tileHeight * row + (tileHeight/2) + 20);
+                // Figure out how to get flag to show
             }
-            // Check if tile is revealed and is a mine
-            else if (currentTile.revealed && currentTile.mine)
-            {
-                ctx.fillStyle = "red";
-                ctx.fillText("M", tileWidth * col + (tileWidth/2) - 20, tileHeight * row + (tileWidth/2) + 20); //temporary placeholder for mine image
-            }
-            // Tile is not revealed and not flagged
             else
             {
-                //ctx.fillStyle = "gray";
+                button.style.fontSize = "0";
             }
-            
         }
     }
 }

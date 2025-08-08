@@ -20,10 +20,17 @@ h1
 .grid-container
 {
     display: grid;
-    width: 500px;
+    width: 530px;
     grid-template-rows: auto auto auto;
     grid-template-columns: auto auto;
     margin: 10px auto;
+}
+
+#gameArea
+{
+    display: grid;
+    width: 500px;
+    gap: 0;
 }
 
 #flag
@@ -55,4 +62,12 @@ h1
 p
 {
     text-align: center;
+}
+
+.tile
+{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    font-size: 0px;
 }

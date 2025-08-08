@@ -53,6 +53,7 @@ class MineGame
 
     // Assign the number of mines in random locations
     randomlyAssignMines() {
+        
         // Assign mines to random location
         let minesAdded = 0;
         while (minesAdded < this.mineCount)
