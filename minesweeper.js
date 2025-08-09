@@ -136,10 +136,21 @@ function render()
             if (tile.revealed)
             {
                 button.style.fontSize = "100%";
+
+                if (tile.mine)
+                {
+                    button.value = "💥";
+                }
+                else
+                {
+                    button.value = tile.numMines;
+                }
             }
             else if (tile.flagged)
             {
-                // Figure out how to get flag to show
+                button.value = "⚑";
+                button.style.fontSize = "100%";
+                button.style.color = "darkmagenta";
             }
             else
             {
