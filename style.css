@@ -17,19 +17,17 @@ h1
     text-align: center;
 }
 
-.grid-container
+p
 {
-    display: grid;
-    width: 530px;
-    grid-template-rows: auto auto auto;
-    grid-template-columns: auto auto;
-    margin: 10px auto;
+    text-align: center;
+    color: rgb(69, 0, 104);
 }
 
 #gameArea
 {
     display: grid;
     width: 500px;
+    height: 500px;
     gap: 0;
 }
 
@@ -42,6 +40,29 @@ h1
     
 }
 
+#gameInfo
+{
+    grid-row: 3 / 4;
+    grid-column: 1 / 2;
+    margin: auto;
+}
+
+#newGame
+{
+    color: rgb(69, 0, 104);
+    font-family: gameFont;
+    background-color: teal;
+}
+
+.grid-container
+{
+    display: grid;
+    width: 530px;
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto auto;
+    margin: 10px auto;
+}
+
 .dropdown
 {
     margin: 10px auto;
@@ -52,22 +73,14 @@ h1
     background-color: rgba(175, 1, 175, 0.263);
 }
 
-#gameInfo
-{
-    grid-row: 3 / 4;
-    grid-column: 1 / 2;
-    margin: auto;
-}
-
-p
-{
-    text-align: center;
-}
 
 .tile
 {
-    width: 100px;
-    height: 100px;
     margin: auto;
     font-size: 0px;
+}
+
+.dropdown
+{
+    color: rgb(69, 0, 104);
 }

@@ -62,6 +62,10 @@ function createGameTiles()
             button.classList.add("tile");
             button.id = "r" + row + "c" + col;
             button.type = "button";
+            let gameWidth = gameArea.getBoundingClientRect().width;
+            let gameHeight = gameArea.getBoundingClientRect().height;
+            button.style.width = gameWidth / game.colCount + "px";
+            button.style.height = gameHeight / game.rowCount + "px";
             if (tile.mine)
             {
                 button.value = "💥";
