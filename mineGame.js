@@ -24,6 +24,7 @@ class MineGame
             this.mineCount = 120;
         }
 
+        this.numFlags = this.mineCount;
         this.winScore = this.rowCount * this.colCount - this.mineCount;
 
         // Allocate game area array with initial mine object
@@ -127,6 +128,14 @@ class MineGame
         // If flag is on and tile is not revealed then toggle flag
         else if (flagOn && !currentTile.revealed)
         {
+            if (this.gameGrid[rowIndex][colIndex].flagged)
+            {
+                this.numFlags++;
+            }
+            else
+            {
+                this.numFlags--;
+            }
             this.gameGrid[rowIndex][colIndex].flagged = !currentTile.flagged;
         }
         // If flag is not on, tile is not flagged and tile is not mine then reveal tile
@@ -209,7 +218,7 @@ class MineGame
         {
             return;
         }
-        // Check if hit tile that is touching a mine
+        // Check if tile is touching a mine
         else if (currentTile.numMines > 0)
         {
             this.gameGrid[rowIndex][colIndex].revealed = true;

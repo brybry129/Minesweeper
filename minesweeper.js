@@ -130,6 +130,8 @@ function render()
     // Request next animation frame in advance
     window.requestAnimationFrame(render);
 
+    document.getElementById("numFlags").innerHTML = game.numFlags;
+
     for (let row = 0; row < game.rowCount; row++)
     {
         for (let col = 0; col < game.colCount; col++)
@@ -137,9 +139,10 @@ function render()
             let tile = game.getTile(row, col);
             let button = document.getElementById("r" + row + "c" + col);
             // Check if tile is revealed
-            if (tile.revealed)
+            if (tile.revealed && !tile.flagged)
             {
                 button.style.fontSize = "100%";
+                button.style.color = "black";
 
                 if (tile.mine)
                 {

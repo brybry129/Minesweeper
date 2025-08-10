@@ -11,7 +11,10 @@
     <h1>Minesweeper</h1>
     <div class="grid-container">
         <div id="gameArea"></div>
-        <button id="flag">⚑</button>
+        <div>
+            <button id="flag">⚑</button>
+            <p id="remainingFlags">Flags: <span id="numFlags"></span></p>
+        </div>
         <div class="dropdown">
             <label for="difficulty">Choose difficulty:</label>
             <select id="difficulty" name="difficulty" type="dropdown">

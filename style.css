@@ -54,6 +54,11 @@ p
     background-color: teal;
 }
 
+#remainingFlags
+{
+    text-align: left;
+}
+
 .grid-container
 {
     display: grid;
