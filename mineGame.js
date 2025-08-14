@@ -15,13 +15,13 @@ class MineGame
         {
             this.rowCount = 10;
             this.colCount = 10;
-            this.mineCount = 25;
+            this.mineCount = 15;
         }
         else
         {
             this.rowCount = 25;
             this.colCount = 25;
-            this.mineCount = 120;
+            this.mineCount = 100;
         }
 
         this.numFlags = this.mineCount;

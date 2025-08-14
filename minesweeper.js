@@ -141,12 +141,13 @@ function render()
             // Check if tile is revealed
             if (tile.revealed && !tile.flagged)
             {
-                button.style.fontSize = "100%";
+                button.style.fontSize = button.offsetWidth * 0.5 + "px";
                 button.style.color = "black";
 
                 if (tile.mine)
                 {
                     button.value = "💥";
+                    button.style.fontSize = button.offsetWidth * 0.4 + "px";
                 }
                 else
                 {
@@ -156,7 +157,7 @@ function render()
             else if (tile.flagged)
             {
                 button.value = "⚑";
-                button.style.fontSize = "100%";
+                button.style.fontSize = button.offsetWidth * 0.5 + "px";
                 button.style.color = "darkmagenta";
             }
             else
